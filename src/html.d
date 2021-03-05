@@ -39,3 +39,25 @@ class Tag {
             return format(" %s='%s'", key, value);
         }
 }
+
+/// The a tag. Used for hyperlinks.
+class A : Tag {
+    public:
+        string Href = "";
+        override string toString() const {
+            enforce(Href.length, "The 'href' attribute needs to be specified for a valid link!");
+
+            string s = depth(_depth, "<a");
+                if (ID.length) s ~= attribute("id", ID);
+                if (Class.length) s ~= attribute("class", Class);
+                s ~= attribute("href", _href);
+                s ~= ">";
+                if (Text.length) s ~= depth(_depth + 1, Text);
+                else s ~= depth(_depth + 1, _href);
+            s ~= depth(_depth, "</a>\n");
+            return s;
+        }
+
+    private:
+        string _href = "";
+}
